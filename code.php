@@ -87,8 +87,29 @@ if (isset($_POST['save_student'])) {
     $telefono = mysqli_real_escape_string($con, $_POST['telefono']);
     $curso = mysqli_real_escape_string($con, $_POST['curso']);
 
-    if (empty($nombres) || empty($apellidos) || empty($correo) || empty($telefono) || empty($curso) || empty($_FILES['foto']['name'])) {
-        $_SESSION['message'] = "POR FAVOR, COMPLETE TODOS LOS CAMPOS.";
+    $campos_faltantes = array();
+
+    if (empty($nombres)) {
+        $campos_faltantes[] = "NOMBRES";
+    }
+    if (empty($apellidos)) {
+        $campos_faltantes[] = "APELLIDOS";
+    }
+    if (empty($correo)) {
+        $campos_faltantes[] = "CORREO";
+    }
+    if (empty($telefono)) {
+        $campos_faltantes[] = "TELEFONO";
+    }
+    if (empty($curso)) {
+        $campos_faltantes[] = "CURSO";
+    }
+    if (empty($_FILES['foto']['name'])) {
+        $campos_faltantes[] = "FOTO";
+    }
+
+    if (!empty($campos_faltantes)) {
+        $_SESSION['message'] = "POR FAVOR, COMPLETE EL CAMPO " . implode(", ", $campos_faltantes);
         header("Location: student-create.php");
         exit(0);
     }
@@ -132,4 +153,3 @@ if (isset($_POST['save_student'])) {
     exit(0);
 }
 ?>
-
